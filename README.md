@@ -39,8 +39,11 @@ phantom.pid   #=> PID or nil if fork fails
 ```
 
 The `on_ok` parameter can be any instances that respond to `call` with no arguments.
+
 The `on_error` parameter can be any instances that respond to `call` with 1 argument to take the exception.
+
 None of the parameters is required.
+
 If `pid_file` is given, `Phantom.run` first check the existence of the file, if exits, raises a `Phantom::ForkError`.
 
 ## TODO
