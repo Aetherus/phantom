@@ -5,6 +5,7 @@ This gem is made to implement the callback mechanism to sub processes.
 ## Requirements
 
 Ruby >= 2.0.0
+
 This gem uses `::fork` and therefore is not compatible with JRuby.
 
 ## Installation
@@ -38,9 +39,9 @@ end
 phantom.pid   #=> PID or nil if fork fails
 ```
 
-The `on_ok` parameter can be any instances that respond to `call` with no arguments.
+The `on_ok` parameter can be any instances that respond to `call` taking no arguments.
 
-The `on_error` parameter can be any instances that respond to `call` with 1 argument to take the exception.
+The `on_error` parameter can be any instances that respond to `call` taking 1 argument, the exception.
 
 None of the parameters is required.
 
