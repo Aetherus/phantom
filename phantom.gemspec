@@ -9,8 +9,8 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Aetherus"]
   spec.email         = ["sasabune0122@gmail.com"]
   spec.description   = %q{This gem is developed to implement callback mechanism to sub processes.}
-  spec.summary       = %q{TODO: Write a gem summary}
-  spec.homepage      = ""
+  spec.summary       = %q{This gem is developed to implement callback mechanism to sub processes. Not production ready.}
+  spec.homepage      = "https://github.com/Aetherus/phantom"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files`.split($/)
