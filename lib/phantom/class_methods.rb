@@ -10,11 +10,16 @@ module Phantom
       f = File.new(pid_file, 'w') if pid_file
 
       pid = fork do
-        at_exit {
+        at_exit do
           o.flush
           o.close
           File.delete pid_file if pid_file
-        }
+        end
+        
+        trap(:TERM) do
+          Process.abort
+        end
+        
         i.close
         begin
           block.call if block_given?
@@ -38,8 +43,8 @@ module Phantom
           else
             on_error.call(status) if on_error
           end
-        rescue Errno::EPIPE => e
-          on_error.call(e)
+        rescue Errno::EPIPE, EOFError => e
+          on_error.call(e) if on_error
         ensure
           i.close
         end

@@ -21,23 +21,27 @@ describe Phantom do
 
   it 'should call on_ok when sub processed normally ends' do
     i = 0
-    Phantom.run(pid_file: pid_file, on_ok: lambda{i = 1}) do
+    err = nil
+    Phantom.run(pid_file: pid_file, on_ok: lambda{i += 1}, on_error: lambda{|e| err = e}) do
     end
     sleep 3
     i.should == 1
+    err.should == nil
   end
 
   it 'should call on_error when sub process raises an unhandled error' do
     err = nil
-
-    Phantom.run(pid_file: pid_file, on_error: lambda{|e| err = e}) do
+    i = 0
+    Phantom.run(pid_file: pid_file, on_ok: lambda{i += 1}, on_error: lambda{|e| err = e}) do
       raise 'Wa ha ha!'
+      i += 1
     end
 
     sleep 3
 
     err.should be_an(StandardError)
     err.message.should == 'Wa ha ha!'
+    i.should == 0
   end
 
   it 'should be OK if pid_file is not given' do
