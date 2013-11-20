@@ -11,6 +11,6 @@ module Phantom
         block.call
       end
     end
-    
+
   end
 end
