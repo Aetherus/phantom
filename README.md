@@ -36,7 +36,21 @@ rescue Phantom::ForkError => e
   puts e.message   #=> error message
 end
 
-phantom.pid   #=> PID or nil if fork fails
+phantom.pid     #=> PID or nil if fork fails
+phantom.status  #=> 'Alive' | 'Dead' | 'Paused'
+phantom.dead?   #=> true if the sub process is dead (i.e. either ended normally or killed)
+phantom.alive?  #=> true if not dead.
+
+phantom.stop      #=> pause the sub process
+phantom.pause     #=> pause is an alias of stop
+phantom.continue  #=> resume the sub process
+phantom.resume    #=> resume is an alias of continue
+
+phantom.kill(1)     #=> send signal to the sub process
+phantom.kill(:TERM) #=> you can as well use the POSIX signal names
+
+phantom.terminate   #=> terminate the sub process gracefully
+phantom.abort!      #=> force the sub process to end immediately
 ```
 
 The `on_ok` parameter can be any instances that respond to `call` taking no arguments.
@@ -57,9 +71,9 @@ If you want a global mutex (i.e. mutex between multiple processes), you can use 
 end
 ```
 
-## TODO
-
-Implement monitoring and intercepting mechanism
+## Caution
+1. The status is NOT completely retrieved from the sub process, so any manipulation out of the phantom instance,
+except terminating the sub process, will not be recognized.
 
 ## Contributing
 

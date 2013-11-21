@@ -4,5 +4,7 @@ module Phantom
     ABORTED = 'Aborted'
     ERROR = 'Error'
     PAUSED = 'Paused'
+    ALIVE = 'Alive'
+    DEAD = 'Dead'
   end
 end

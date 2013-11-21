@@ -3,7 +3,7 @@ require 'phantom'
 describe Phantom do
   pid_file = 'tmp/phantom.pid'
 
-  after do
+  after(:each) do
     File.delete pid_file if File.exist? pid_file
   end
 

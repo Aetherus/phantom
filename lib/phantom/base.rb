@@ -1,9 +1,9 @@
 module Phantom
   class Base
-    attr_reader :pid, :status
+    attr_reader :pid
 
     def initialize(pid)
-      @pid = pid
+      @pid = pid.nil? ? nil : pid.to_i
     end
     
     def kill(signal)
@@ -30,9 +30,45 @@ module Phantom
       @process_priority ||= Process.getpriority(Process::PRIO_PROCESS, @pid)
     end
     
-    def abort
-      kill(:TERM)
+    def abort!
+      kill(:ABRT) if alive?
     end
-    
+
+    def terminate
+      kill(:TERM) if alive?
+    end
+
+    def stop
+      if alive?
+        kill(:STOP)
+        @status = Phantom::Status::PAUSED
+      end
+    end
+    alias :pause :stop
+
+    def continue
+      if alive?
+        kill(:CONT)
+        @status = Phantom::Status::ALIVE
+      end
+    end
+    alias :resume :continue
+
+    def status
+      begin
+        Process.kill(0, @pid)
+        return @status ||= Phantom::Status::ALIVE
+      rescue Errno::ESRCH
+        return @status = Phantom::Status::DEAD
+      end
+    end
+
+    def alive?
+      !dead?
+    end
+
+    def dead?
+      status == Phantom::Status::DEAD
+    end
   end
 end
