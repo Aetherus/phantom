@@ -16,10 +16,6 @@ module Phantom
           File.delete pid_file if pid_file
         end
         
-        trap(:TERM) do
-          Process.abort
-        end
-        
         i.close
         begin
           block.call if block_given?
