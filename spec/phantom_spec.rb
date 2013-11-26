@@ -8,7 +8,12 @@ describe Phantom do
   end
 
   it 'should remove the pid file when normally ends.' do
-    Phantom.run(pid_file: pid_file) {}
+    failed = false
+    Phantom.run(pid_file: pid_file, on_error: lambda{ failed = true }) {
+      raise 'PID file not found.' unless File.exists? pid_file
+    }
+    sleep 1
+    failed.should == false
     File.should_not exist(pid_file)
   end
 

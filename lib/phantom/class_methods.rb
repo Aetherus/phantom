@@ -7,9 +7,13 @@ module Phantom
       raise ForkError.new('Running process exists.', pid_file) if pid_file and File.exist?(pid_file)
 
       i, o = IO.pipe
-      f = File.new(pid_file, 'w') if pid_file
+      #f = File.new(pid_file, 'w') if pid_file
 
       pid = fork do
+        if pid_file
+          File.open(pid_file, 'w') {|f| f.write Process.pid}
+        end
+
         at_exit do
           o.flush
           o.close
@@ -26,8 +30,8 @@ module Phantom
       end
 
       Process.detach(pid)
-      f.write(pid.to_s) if pid_file
-      f.close if pid_file
+      #f.write(pid.to_s) if pid_file
+      #f.close if pid_file
       o.close
 
       Thread.abort_on_exception = true
