@@ -83,4 +83,12 @@ describe Phantom do
     sleep 5
     File.should_not exist(pid_file)
   end
+
+  it 'should be able to set process name' do
+    phantom = Phantom.run(name: 'some_bizzare_name') do
+      sleep 5
+    end
+    `ps aux | grep some_bizzare_name`.should_not be_empty
+    phantom.name.should == 'some_bizzare_name'
+  end
 end

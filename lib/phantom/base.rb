@@ -1,9 +1,10 @@
 module Phantom
   class Base
-    attr_reader :pid
+    attr_reader :pid, :name
 
-    def initialize(pid)
+    def initialize(pid, name)
       @pid = pid.nil? ? nil : pid.to_i
+      @name = name
     end
     
     def kill(signal)

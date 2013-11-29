@@ -1,7 +1,7 @@
 module Phantom
 
   class << self
-    def run(pid_file: nil, on_ok: nil, on_error: nil, &block)
+    def run(name: 'phantom', pid_file: nil, on_ok: nil, on_error: nil, &block)
       return Phantom::Base.new(nil) unless block_given?
 
       raise ForkError.new('Running process exists.', pid_file) if pid_file and File.exist?(pid_file)
@@ -10,6 +10,7 @@ module Phantom
       #f = File.new(pid_file, 'w') if pid_file
 
       pid = fork do
+        $0 = name   # Change the subprocess name
         if pid_file
           File.open(pid_file, 'w') {|f| f.write Process.pid}
         end
@@ -53,7 +54,7 @@ module Phantom
         end
       end
 
-      return Phantom::Base.new(pid)
+      return Phantom::Base.new(pid, name)
     end
   end
 end

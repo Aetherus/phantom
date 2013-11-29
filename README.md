@@ -37,6 +37,7 @@ rescue Phantom::ForkError => e
 end
 
 phantom.pid     #=> PID or nil if fork fails
+phantom.name    #=> name of the subprocess. The name equals to the name displayed by linux command `ps`.
 phantom.status  #=> 'Alive' | 'Dead' | 'Paused'
 phantom.dead?   #=> true if the sub process is dead (i.e. either ended normally or killed)
 phantom.alive?  #=> true if not dead.
