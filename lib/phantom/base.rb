@@ -2,7 +2,7 @@ module Phantom
   class Base
     attr_reader :pid, :name
 
-    def initialize(pid, name)
+    def initialize(pid, name=nil)
       @pid = pid.nil? ? nil : pid.to_i
       @name = name
     end
