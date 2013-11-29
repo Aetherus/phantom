@@ -6,6 +6,7 @@ describe Phantom::Base do
 
   after(:each) do
     File.delete count_file if File.exists? count_file
+    @error = nil
   end
 
   it 'should kill the process when called on abort' do
@@ -19,8 +20,8 @@ describe Phantom::Base do
     phantom.status.should == Phantom::Status::DEAD
   end
 
-  it 'should be kill the process when called on terminate' do
-    phantom = Phantom.run do
+  it 'should kill the process when called on terminate' do
+    phantom = Phantom.run(on_error: lambda{|e| @error = e}) do
       sleep 3
       File.new(count_file, 'w').close
     end
@@ -28,6 +29,7 @@ describe Phantom::Base do
     sleep 5
     File.should_not exist(count_file)
     phantom.status.should == Phantom::Status::DEAD
+    @error.should be_nil
   end
 
   it 'should be able to pause and to resume the process' do

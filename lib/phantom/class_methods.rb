@@ -17,15 +17,18 @@ module Phantom
         at_exit do
           o.flush
           o.close
-          File.delete pid_file if pid_file
+          if pid_file and File.exists? pid_file
+            File.delete pid_file if Process.pid == File.read(pid_file).to_i
+          end
         end
         
         i.close
         begin
           block.call if block_given?
           Marshal.dump(Status::OK, o)
-        rescue StandardError => e
-          Marshal.dump(e, o)
+        rescue Exception => e
+          status = e.is_a?(SignalException) ? Status::OK : e
+          Marshal.dump(status, o)
         end
       end
 
